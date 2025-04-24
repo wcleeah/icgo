@@ -27,9 +27,22 @@ func New(l *lexer.Lexer) *Parser {
 		l: l,
         errors: []string{},
         prefixParseFns: make(map[token.TokenType]prefixParseFn,0),
+        infixParseFns: make(map[token.TokenType]infixParseFn, 0),
 	}
 
     p.registerPrefix(token.IDENT, p.parseIdentifier)
+    p.registerPrefix(token.INT, p.parseIntegerLiteral)
+    p.registerPrefix(token.BANG, p.parsePrefixExpression)
+    p.registerPrefix(token.MINUS, p.parsePrefixExpression)
+
+    p.registerInfix(token.PLUS, p.parseInfixExpression)
+    p.registerInfix(token.MINUS, p.parseInfixExpression)
+    p.registerInfix(token.SLASH, p.parseInfixExpression)
+    p.registerInfix(token.ASTERISK, p.parseInfixExpression)
+    p.registerInfix(token.EQ, p.parseInfixExpression)
+    p.registerInfix(token.NOT_EQ, p.parseInfixExpression)
+    p.registerInfix(token.LT, p.parseInfixExpression)
+    p.registerInfix(token.GT, p.parseInfixExpression)
 
 	p.NextToken()
 	p.NextToken()
